@@ -135,15 +135,7 @@ function createParticlesFromShape(drawFn, baseGap = 4) {
   drawFn(shapeCtx, w, h, shapeScale);
 
   const img = shapeCtx.getImageData(0, 0, w, h).data;
-
-  const mobile = window.innerWidth <= 600;   // 判斷是不是手機
-  const gapBase = baseGap * shapeScale;
-
-  // 手機：更密一點；桌機：維持原本
-  const gap = mobile
-    ? Math.max(2, gapBase * 0.7)
-    : Math.max(3, gapBase);
-
+  const gap = Math.max(2, baseGap * shapeScale);
   const result = [];
 
   for (let y = 0; y < h; y += gap) {
@@ -174,11 +166,8 @@ function createParticlesFromShape(drawFn, baseGap = 4) {
 function wrapTextParticles(points) {
   const cx = effectsCanvas.width / 2;
   const cy = effectsCanvas.height / 2;
-
-  const mobile = window.innerWidth <= 600;
-  // 手機版收得比較緊，字會比較清楚
-  const spreadX = effectsCanvas.width * (mobile ? 0.25 : 0.4);
-  const spreadY = effectsCanvas.height * (mobile ? 0.25 : 0.4);
+  const spreadX = effectsCanvas.width * 0.4;
+  const spreadY = effectsCanvas.height * 0.4;
 
   return points.map(p => ({
     ...p,
@@ -192,7 +181,7 @@ function wrapTextParticles(points) {
   }));
 }
 
-// 讓目前粒子進入「消散」狀態（大字切換 / 蛋糕消散都會用到）
+// 讓目前粒子進入「消散」狀態
 function scatterCurrentText() {
   for (const p of particles) {
     if (p.isText && p.phase !== "scatter") {
@@ -205,7 +194,6 @@ function scatterCurrentText() {
     }
   }
 }
-
 
 /********* 各種形狀 *********/
 
@@ -457,7 +445,7 @@ function drawEffects(timestamp) {
     efCtx.globalAlpha = alpha;
     efCtx.fillStyle = p.color;
     efCtx.beginPath();
-    efCtx.arc(drawX, drawY, 2.6, 0, Math.PI * 2);
+    efCtx.arc(drawX, drawY, 1.6, 0, Math.PI * 2);
     efCtx.fill();
   }
   efCtx.globalAlpha = 1;
@@ -1005,5 +993,3 @@ window.addEventListener("resize", () => {
   resizeMatrixCanvas();
   resizeEffectsCanvas();
 });
-
-
