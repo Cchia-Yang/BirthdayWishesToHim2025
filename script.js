@@ -170,6 +170,43 @@ function createParticlesFromShape(drawFn, baseGap = 4) {
   return result;
 }
 
+/********* 聚攏 / 消散專用包裝：文字 / 愛心 / 蛋糕粒子 *********/
+function wrapTextParticles(points) {
+  const cx = effectsCanvas.width / 2;
+  const cy = effectsCanvas.height / 2;
+
+  const mobile = window.innerWidth <= 600;
+  // 手機版收得比較緊，字會比較清楚
+  const spreadX = effectsCanvas.width * (mobile ? 0.25 : 0.4);
+  const spreadY = effectsCanvas.height * (mobile ? 0.25 : 0.4);
+
+  return points.map(p => ({
+    ...p,
+    x: cx + (Math.random() - 0.5) * spreadX,
+    y: cy + (Math.random() - 0.5) * spreadY,
+    alpha: 0,
+    phase: "appear",   // appear -> stable -> scatter
+    vx: 0,
+    vy: 0,
+    isText: true
+  }));
+}
+
+// 讓目前粒子進入「消散」狀態（大字切換 / 蛋糕消散都會用到）
+function scatterCurrentText() {
+  for (const p of particles) {
+    if (p.isText && p.phase !== "scatter") {
+      p.phase = "scatter";
+      p.alpha = p.alpha || 1;
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 2 + Math.random() * 2;
+      p.vx = Math.cos(angle) * speed;
+      p.vy = Math.sin(angle) * speed;
+    }
+  }
+}
+
+
 /********* 各種形狀 *********/
 
 // 倒數數字
@@ -968,4 +1005,5 @@ window.addEventListener("resize", () => {
   resizeMatrixCanvas();
   resizeEffectsCanvas();
 });
+
 
