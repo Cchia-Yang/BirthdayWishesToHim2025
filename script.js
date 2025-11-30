@@ -135,7 +135,15 @@ function createParticlesFromShape(drawFn, baseGap = 4) {
   drawFn(shapeCtx, w, h, shapeScale);
 
   const img = shapeCtx.getImageData(0, 0, w, h).data;
-  const gap = Math.max(3, baseGap * shapeScale);
+
+  const mobile = window.innerWidth <= 600;   // 判斷是不是手機
+  const gapBase = baseGap * shapeScale;
+
+  // 手機：更密一點；桌機：維持原本
+  const gap = mobile
+    ? Math.max(2, gapBase * 0.7)
+    : Math.max(3, gapBase);
+
   const result = [];
 
   for (let y = 0; y < h; y += gap) {
@@ -160,39 +168,6 @@ function createParticlesFromShape(drawFn, baseGap = 4) {
     }
   }
   return result;
-}
-
-/********* 聚攏 / 消散專用包裝：文字 / 愛心 / 蛋糕粒子 *********/
-function wrapTextParticles(points) {
-  const cx = effectsCanvas.width / 2;
-  const cy = effectsCanvas.height / 2;
-  const spreadX = effectsCanvas.width * 0.4;
-  const spreadY = effectsCanvas.height * 0.4;
-
-  return points.map(p => ({
-    ...p,
-    x: cx + (Math.random() - 0.5) * spreadX,
-    y: cy + (Math.random() - 0.5) * spreadY,
-    alpha: 0,
-    phase: "appear",   // appear -> stable -> scatter
-    vx: 0,
-    vy: 0,
-    isText: true
-  }));
-}
-
-// 讓目前粒子進入「消散」狀態
-function scatterCurrentText() {
-  for (const p of particles) {
-    if (p.isText && p.phase !== "scatter") {
-      p.phase = "scatter";
-      p.alpha = p.alpha || 1;
-      const angle = Math.random() * Math.PI * 2;
-      const speed = 2 + Math.random() * 2;
-      p.vx = Math.cos(angle) * speed;
-      p.vy = Math.sin(angle) * speed;
-    }
-  }
 }
 
 /********* 各種形狀 *********/
@@ -993,3 +968,4 @@ window.addEventListener("resize", () => {
   resizeMatrixCanvas();
   resizeEffectsCanvas();
 });
+
