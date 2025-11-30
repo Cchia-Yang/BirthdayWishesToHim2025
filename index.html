@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>北京时间 · Beijing Time</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- 電子風格字型 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap">
+  <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap">
+
+
+  <!-- 自訂樣式 -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- LOVE 字雨背景 -->
+  <canvas id="matrix-canvas"></canvas>
+  <!-- 粒子字 / 蛋糕 / 愛心 + 煙火 -->
+  <canvas id="effects-canvas"></canvas>
+
+  <!-- 重播按鈕 -->
+  <button id="replay-btn"><span>▶</span>再看一次</button>
+
+  <!-- 主要 UI 面板 -->
+  <div class="ui-root">
+    <div class="panel">
+      <div class="top-row">
+        <div class="now-time digital" id="now-time">
+          BEIJING TIME · --:--:--
+        </div>
+        <div class="target-info digital" id="target-info">
+          目标时间：--年--月--日 --:-- （北京时间）
+        </div>
+      </div>
+
+      <!-- 等待啟動畫面（真正顯示說明的首頁） -->
+      <section id="time-section" class="section active">
+        <div class="time-inner">
+          <h1 class="digital">Birthday Code Online</h1>
+          <p class="countdown-preview digital" id="distance-text">
+            距离启动时间计算中...
+          </p>
+        </div>
+      </section>
+
+      <!-- 倒數（畫面在 canvas 上） -->
+      <section id="countdown-section" class="section">
+        <div>
+          <div class="label">启动庆生倒数 · Birthday countdown</div>
+          <div id="countdown" class="digital">10</div>
+          <div class="sub">背景会出现 LOVE 字雨与烟花，中央为粒子数字与文字。</div>
+        </div>
+      </section>
+
+      <!-- 蛋糕 + 吹蠟燭 -->
+      <section id="cake-section" class="section">
+        <div>
+          <div class="label">Happy Birthday · 请对着萤幕轻轻吹一口气</div>
+          <div class="tips">
+            系统会使用麦克风侦测「风声」，若无法使用麦克风，约 5 秒后会自动帮你吹熄蜡烛。
+          </div>
+        </div>
+      </section>
+
+      <!-- 打字機訊息 -->
+      <section id="message-section" class="section">
+        <div class="msg-inner">
+          <div class="msg-title">
+            <span class="digital">MESSAGE ·</span> 给你的话
+          </div>
+          <div id="message-text"></div>
+          <div class="msg-note digital">
+            from：家嘉
+          </div>
+        </div>
+      </section>
+
+      <!-- 最後：粉紅粒子愛心 -->
+      <section id="heart-section" class="section">
+        <div>
+          <div class="label digital">END · Birthday Code Completed</div>
+          <div class="heart-text">
+            以上就是今天为你启动的全部「庆生代码流程」。<br />
+            不管未来系统会跑到哪一版更新、生活遇到多少例外状况，<br />
+            我都还是会把「喜欢你」这件事写在最高权限、不会被覆盖的那个区块里。
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- 行為程式 -->
+  <script src="script.js"></script>
+</body>
+</html>
