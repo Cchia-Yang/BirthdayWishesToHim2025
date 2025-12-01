@@ -135,7 +135,7 @@ function createParticlesFromShape(drawFn, baseGap = 4) {
   drawFn(shapeCtx, w, h, shapeScale);
 
   const img = shapeCtx.getImageData(0, 0, w, h).data;
-  const gap = Math.max(2, baseGap * shapeScale);
+  const gap = Math.max(1, baseGap * shapeScale);
   const result = [];
 
   for (let y = 0; y < h; y += gap) {
@@ -147,7 +147,8 @@ function createParticlesFromShape(drawFn, baseGap = 4) {
         const g = img[idx + 1];
         const b = img[idx + 2];
         const centerX = effectsCanvas.width / 2 - w / 2;
-        const centerY = effectsCanvas.height / 2 - h / 2;
+        const offsetY = (currentMode === "heart") ? -effectsCanvas.height * 0.2 : 0;
+        const centerY = effectsCanvas.height / 2 - h / 2 + offsetY;
         result.push({
           x: centerX + x,
           y: centerY + y,
@@ -286,7 +287,9 @@ function shapeHeart() {
   const base = createParticlesFromShape((ctx, w, h, s) => {
     ctx.clearRect(0, 0, w, h);
     const cx = w / 2;
-    const cy = h / 2 + 10 * s;
+
+    const cy = h / 2 * s;
+
 
     // ★ 愛心整體變大：R 從 9.5 調到 11.5
     const R = 11.5;
@@ -315,7 +318,6 @@ function shapeHeart() {
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
-      // ★ 中間文字加大：75 → 95
       const fontSize = 95 * s;
       ctx.font =
         `bold ${fontSize}px 'Microsoft JhengHei','Noto Sans TC',sans-serif`;
@@ -445,7 +447,7 @@ function drawEffects(timestamp) {
     efCtx.globalAlpha = alpha;
     efCtx.fillStyle = p.color;
     efCtx.beginPath();
-    efCtx.arc(drawX, drawY, 1.6, 0, Math.PI * 2);
+    efCtx.arc(drawX, drawY, 1, 0, Math.PI * 2);
     efCtx.fill();
   }
   efCtx.globalAlpha = 1;
@@ -731,7 +733,7 @@ function startBigWordsPhase() {
     currentWord = BIG_WORDS[index];
     particles = particles.concat(shapeWord(currentWord));
     index++;
-    setTimeout(showNext, 2600);  // 讀字時間拉長一點
+    setTimeout(showNext, 2500);  // 讀字時間拉長一點
   }
 
   showNext();
